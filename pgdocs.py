@@ -46,23 +46,27 @@ def parse_table_meta():
                     "size": rows[4],
                     "comment": rows[5]
                 }
-                print("table = " + table["table"])
-                columns = []
-                with open(table["table"] + ".txt", "r") as colfile:
-                    for col_line in colfile:
-                        if line.strip():
-                            col_row = re.split("\|\s", col_line)
-                            if len(col_row) != 1:
-                                print(col_row)
-                                columns.append({
-                                    "name": col_row[0].strip(),
-                                    "type": col_row[1].strip(),
-                                    "desc": col_row[7].strip()
-                                })
+                # print("table = " + table["table"])
 
-                table["columns"] = columns
+                table["columns"] = parse_columns_meta(table)
                 tables.append(table)
     return tables
+
+
+def parse_columns_meta(table):
+    columns = []
+    with open(table["table"] + ".txt", "r") as colfile:
+        for line in colfile:
+            if line.strip():
+                col_row = re.split("\|\s", line)
+                if len(col_row) != 1:
+                    # print(col_row)
+                    columns.append({
+                        "name": col_row[0].strip(),
+                        "type": col_row[1].strip(),
+                        "desc": col_row[7].strip()
+                    })
+    return columns
 
 
 def load_tables_meta():

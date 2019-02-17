@@ -1,33 +1,35 @@
+import mrkdwn as md
+
+
 def generate_markdown(tables):
     # print(tables)
 
     markdown = ""
 
     for table in tables:
-        markdown += gen_table_desc(table)
+        markdown += table_desc(table)
     return markdown
 
 
-def gen_table_desc(table):
-    markdown = ""
-    markdown += "# " + table["table"] + "\n"
+def table_desc(table):
+    table_desc = md.h1(table["table"]) + "\n" + table["comment"] + "\n"
+    return table_desc + columns_table(table["columns"]) + "\n"
 
-    # if not table["comment"]:
-    markdown += "\n " + table["comment"] + "\n"
 
-    t = (
+def columns_table(columns):
+    return table_header() + columns_desc(columns)
+
+
+def table_header():
+    return (
         "| name | type | description |\n"
         "|--------|-------|------|\n"
     )
 
-    cols = ""
-    for column in table["columns"]:
-        cols += "| " + column["name"] + " | " + \
+
+def columns_desc(columns):
+    col_str = ""
+    for column in columns:
+        col_str += "| " + column["name"] + " | " + \
             column["type"] + " | " + column["desc"] + " |\n"
-
-    markdown += t + cols
-    return markdown
-
-
-def gen_column_desc():
-    print("col desc")
+    return col_str
