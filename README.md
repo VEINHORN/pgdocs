@@ -16,9 +16,16 @@ python pgdocs.py create
 
 It will create database docs in current working directory using default output format (Markdown).
 
+### Options
+
+```
+-f, --format   Format in which documentation will be generated
+-o, --output   Output folder for generated documentation
+```
+
 ### Formats
 
-There are several output formats which you can use to generate docs.
+You can generate database documentation in one of the available formats: Markdown, Excel, or PDF.
 
 #### Markdown
 
