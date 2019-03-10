@@ -36,7 +36,7 @@ python pgdocs.py create
 
 ### Formats
 
-You can generate database documentation in one of the available formats: Markdown, Excel, or PDF.
+`pgdocs` can generate database documentation in different formats: *Markdown*, *Excel*, *PDF*. You can also deploy documentation in *MkDocs* format using *Docker*.
 
 #### Markdown
 
@@ -44,6 +44,14 @@ To generate docs in Markdown format:
 
 ```shell
 python pgdocs.py create -f markdown
+```
+
+#### MkDocs
+
+To generate docs in *MkDocs* format run below command:
+
+```shell
+python pgdocs.py create -f mkdocs
 ```
 
 ### Output
