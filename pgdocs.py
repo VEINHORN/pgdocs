@@ -15,10 +15,10 @@ def main():
     args = parser.parse_args()
 
     if args.create:
-        create_docs(args.format)
+        create_docs(args.format, args.output)
 
 
-def create_docs(format):
+def create_docs(format, output):
     """Select default format when format option isn't specified"""
     if not format:
         format = "markdown"
@@ -29,7 +29,12 @@ def create_docs(format):
         load_tables_meta(meta_dir)
         tables = parse_table_meta(meta_dir)
         markdown = mdgen.generate_markdown(tables)
-        with open("docs.md", "w") as outfile:
+
+        if output and (not os.path.exists(output)):
+            os.makedirs(output)
+
+        out_path = os.path.join(output, "docs.md") if format else "docs.md"
+        with open(out_path, "w") as outfile:
             outfile.write(markdown)
 
 

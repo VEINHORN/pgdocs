@@ -2,6 +2,7 @@ import mrkdwn as md
 
 
 def generate_markdown(tables):
+    """Generate markdown based on tables metadata"""
     # print(tables)
 
     markdown = ""
