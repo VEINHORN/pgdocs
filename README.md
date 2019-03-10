@@ -4,7 +4,10 @@
 
 ## Prerequisites
 
-You need to have `psql` utility in your **PATH**.
+There are several prerequisites to run script properly:
+
+- *Python 3* should be installed
+- You need to have `psql` utility in your **PATH**
 
 ## Usage
 
@@ -15,6 +18,14 @@ python pgdocs.py create
 ```
 
 It will create database docs in current working directory using default output format (Markdown).
+
+### Commands
+
+For now there is only one command - `create` which creates docs:
+
+```shell
+python pgdocs.py create
+```
 
 ### Options
 
@@ -32,5 +43,15 @@ You can generate database documentation in one of the available formats: Markdow
 To generate docs in Markdown format:
 
 ```shell
-python pgdocs.py create --f markdown
+python pgdocs.py create -f markdown
 ```
+
+### Output
+
+You can specify output folder for generated documentation:
+
+```shell
+python pgdocs.py create -o gen
+```
+
+and you end up with created docs in `gen/docs.md`.
