@@ -3,6 +3,7 @@ import subprocess
 import re
 import mdgen
 import os
+import psqlcmd as psql
 
 
 def main():
@@ -33,7 +34,9 @@ def create_docs(format, output):
         if output and (not os.path.exists(output)):
             os.makedirs(output)
 
-        out_path = os.path.join(output, "docs.md") if format else "docs.md"
+        out_path = os.path.join(
+            output, "docs.md") if output and format else "docs.md"
+
         with open(out_path, "w") as outfile:
             outfile.write(markdown)
 
@@ -56,7 +59,7 @@ def parse_table_meta(meta_dir):
                     "size": rows[4],
                     "comment": rows[5]
                 }
-                # print("table = " + table["table"])
+                print("table = " + table["table"])
 
                 table["columns"] = parse_columns_meta(meta_dir, table)
                 tables.append(table)
@@ -70,7 +73,8 @@ def parse_columns_meta(meta_dir, table):
             if line.strip():
                 col_row = re.split("\|\s", line)
                 if len(col_row) != 1:
-                    # print(col_row)
+                    print(col_row)
+
                     columns.append({
                         "name": col_row[0].strip(),
                         "type": col_row[1].strip(),
@@ -80,13 +84,18 @@ def parse_columns_meta(meta_dir, table):
 
 
 def load_tables_meta(meta_dir, hostname="localhost", db_name="store_db"):
-    """Download database metadata using psql utility"""
+    """Fetch meta data from PostgreSQL instance using psql utility"""
 
     if not os.path.exists(meta_dir):
         os.mkdir(meta_dir)
 
+    # fetch tables metadata
     with open(os.path.join(meta_dir, "tables.txt"), "w") as outfile:
         subprocess.call(db_meta_cmd(hostname, db_name), stdout=outfile)
+
+    # fetch views metadata
+    # with open(os.path.join(meta_dir, "views.txt"), "w") as outfile:
+    #    subprocess.call(psql.views_meta_cmd(hostname, db_name), stdout=outfile)
 
     tables = []
     with open(os.path.join(meta_dir, "tables.txt"), "r") as inpfile:
@@ -100,7 +109,7 @@ def load_tables_meta(meta_dir, hostname="localhost", db_name="store_db"):
 
 
 def db_meta_cmd(hostname, db_name):
-    return ["psql", "-c", "\d+", "-t", "-h", hostname, "-d", db_name]
+    return ["psql", "-c", "\dt+", "-t", "-h", hostname, "-d", db_name]
 
 
 def table_meta_cmd(table):
