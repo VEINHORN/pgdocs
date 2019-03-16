@@ -1,6 +1,7 @@
 import argparse
 import mdgen
 import htmlgen
+import mkdocsgen
 import meta
 import os
 
@@ -30,12 +31,15 @@ def create_docs(host, port, db_name, format, output):
 
     meta_dir = "meta"
 
+    # Getting database metadata
     metadata = meta.fetch(
         meta_dir, host, port, db_name) if host and port else meta.fetch(meta_dir)
 
+    # Here we put generated documentation
     if output and (not os.path.exists(output)):
         os.makedirs(output)
 
+    # Generated docs depending on selected format
     if format == "markdown":
         print("Start generating docs in Markdown format...")
 
@@ -45,7 +49,7 @@ def create_docs(host, port, db_name, format, output):
         markdown = mdgen.generate(metadata)
         with open(out_path, "w") as outfile:
             outfile.write(markdown)
-    if format == "html":
+    elif format == "html":
         print("Start generating docs in HTML format...")
 
         out_path = os.path.join(
@@ -54,6 +58,10 @@ def create_docs(host, port, db_name, format, output):
         markdown = htmlgen.generate(metadata)
         with open(out_path, "w") as outfile:
             outfile.write(markdown)
+    elif format == "mkdocs":
+        mkdocsgen.generate(metadata, output)
+        # create docs folder and put all generated Markdown files in it
+        # create mkdocs.yml file
 
 
 def create_markdown_docs():
