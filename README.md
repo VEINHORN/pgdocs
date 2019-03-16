@@ -30,15 +30,28 @@ python pgdocs.py create
 ### Options
 
 ```
+-h, --host     Database host
+-p, --port     Database port
+-d, --database Database name
 -f, --format   Format in which documentation will be generated
 -o, --output   Output folder for generated documentation
 ```
 
-### Formats
+#### Configuration
+
+You can specify database host, port and name using command line options:
+
+```shell
+python pgdocs.py create -h localhost -p 5432 -d store_db 
+```
+
+If you'll not specify this options `pgdocs` will try to generate docs from `localhost:5432`.
+
+#### Formats
 
 `pgdocs` can generate database documentation in different formats: *Markdown*, *Excel*, *PDF*. You can also deploy documentation in *MkDocs* format using *Docker*.
 
-#### Markdown
+##### Markdown
 
 To generate docs in Markdown format:
 
@@ -46,7 +59,7 @@ To generate docs in Markdown format:
 python pgdocs.py create -f markdown
 ```
 
-#### HTML
+##### HTML
 
 To generate docs in HTML format just type:
 
@@ -54,7 +67,7 @@ To generate docs in HTML format just type:
 python pgdocs.py create -f html
 ```
 
-#### MkDocs
+##### MkDocs
 
 To generate docs in *MkDocs* format run below command:
 
@@ -62,7 +75,7 @@ To generate docs in *MkDocs* format run below command:
 python pgdocs.py create -f mkdocs
 ```
 
-### Output
+#### Output
 
 You can specify output folder for generated documentation:
 
