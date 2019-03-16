@@ -1,5 +1,6 @@
 import argparse
 import mdgen
+import htmlgen
 import meta
 import os
 
@@ -23,6 +24,8 @@ def create_docs(format, output):
         format = "markdown"
 
     if format == "markdown":
+        print("Start generating docs in Markdown format...")
+
         meta_dir = "meta"
 
         metadata = meta.fetch(meta_dir)
@@ -33,6 +36,24 @@ def create_docs(format, output):
 
         out_path = os.path.join(
             output, "docs.md") if output and format else "docs.md"
+
+        with open(out_path, "w") as outfile:
+            outfile.write(markdown)
+    if format == "html":
+        print("Start generating docs in HTML format...")
+
+        meta_dir = "meta"
+
+        metadata = meta.fetch(meta_dir)
+        markdown = htmlgen.generate(metadata)
+
+        print(markdown)
+
+        if output and (not os.path.exists(output)):
+            os.makedirs(output)
+
+        out_path = os.path.join(
+            output, "docs.html") if output and format else "docs.html"
 
         with open(out_path, "w") as outfile:
             outfile.write(markdown)

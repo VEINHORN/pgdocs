@@ -46,6 +46,14 @@ To generate docs in Markdown format:
 python pgdocs.py create -f markdown
 ```
 
+#### HTML
+
+To generate docs in HTML format just type:
+
+```shell
+python pgdocs.py create -f html
+```
+
 #### MkDocs
 
 To generate docs in *MkDocs* format run below command:
