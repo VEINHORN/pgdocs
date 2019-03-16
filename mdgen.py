@@ -1,16 +1,33 @@
+"""
+Generates docs in Markdown format
+"""
+
 import mrkdwn as md
 
 
-def generate(tables):
+def generate(metadata):
     """Generate markdown based on tables metadata"""
     # print(tables)
+    # print(views)
+    tables = metadata["tables"]
+    views = metadata["views"]
 
     markdown = ""
-    markdown += md.h1("Tables") + "\n"
 
+    markdown += md.h1("Tables") + "\n"
     for table in tables:
         markdown += table_desc(table)
+
+    markdown += md.h1("Views") + "\n"
+    for view in views:
+        markdown += view_desc(view)
+
     return markdown
+
+
+def view_desc(view):
+    view_desc = md.h2(view["view_name"]) + "\n" + view["comment"] + "\n"
+    return view_desc + columns_table(view["columns"]) + "\n"
 
 
 def table_desc(table):

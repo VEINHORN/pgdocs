@@ -1,5 +1,5 @@
 """
-Contains code which gets meta data from database
+Contains code which gets meta data from database. It should produce one big metadata file at the end.
 """
 
 import os
@@ -9,11 +9,17 @@ import re
 
 
 def fetch(meta_dir):
-    load_tables_meta(meta_dir)
-    return parse_table_meta(meta_dir)
+    fetch_metadata(meta_dir)
+
+    tables = parse_tables_meta(meta_dir)
+    views = parse_views_meta(meta_dir)
+    return {
+        "tables": tables,
+        "views": views
+    }
 
 
-def load_tables_meta(meta_dir, hostname="localhost", db_name="store_db"):
+def fetch_metadata(meta_dir, hostname="localhost", db_name="store_db"):
     """Fetch metadata from PostgreSQL instance using psql utility"""
 
     if not os.path.exists(meta_dir):
@@ -24,7 +30,6 @@ def load_tables_meta(meta_dir, hostname="localhost", db_name="store_db"):
         subprocess.call(psql.tables_meta_cmd(
             hostname, db_name), stdout=outfile)
 
-    # Read tables.txt and fetch meta for every table
     tables = []
     with open(os.path.join(meta_dir, "tables.txt"), "r") as inpfile:
         for line in inpfile:
@@ -36,8 +41,45 @@ def load_tables_meta(meta_dir, hostname="localhost", db_name="store_db"):
             subprocess.call(psql.table_meta_cmd(
                 hostname, db_name, table), stdout=outfile)
 
+    # Fetch views metadata
+    with open(os.path.join(meta_dir, "views.txt"), "w") as outfile:
+        subprocess.call(psql.views_meta_cmd(hostname, db_name), stdout=outfile)
 
-def parse_table_meta(meta_dir):
+    views = []
+    with open(os.path.join(meta_dir, "views.txt"), "r") as inpfile:
+        for line in inpfile:
+            if line.strip():
+                views.append(re.split("\|\s", line)[1].strip())
+
+    for view in views:
+        with open(os.path.join(meta_dir, view + ".txt"), "w") as outfile:
+            subprocess.call(psql.view_meta_cmd(
+                hostname, db_name, view), stdout=outfile)
+
+
+def parse_views_meta(meta_dir):
+    views = []
+    with open(os.path.join(meta_dir, "views.txt"), "r") as inpfile:
+        for line in inpfile:
+            if line.strip():
+                rows = re.split("\|\s", line)
+                view = {
+                    "schema": rows[0],
+                    "view_name": rows[1].strip(),
+                    "type": rows[2],
+                    "user": rows[3],
+                    "size": rows[4],
+                    "comment": rows[5]
+                }
+                print("view = " + view["view_name"])
+
+                view["columns"] = parse_columns_meta2(
+                    meta_dir, view["view_name"])
+                views.append(view)
+    return views
+
+
+def parse_tables_meta(meta_dir):
     tables = []
     with open(os.path.join(meta_dir, "tables.txt"), "r") as inpfile:
         for line in inpfile:
@@ -53,14 +95,14 @@ def parse_table_meta(meta_dir):
                 }
                 print("table = " + table["table"])
 
-                table["columns"] = parse_columns_meta(meta_dir, table)
+                table["columns"] = parse_columns_meta(meta_dir, table["table"])
                 tables.append(table)
     return tables
 
 
-def parse_columns_meta(meta_dir, table):
+def parse_columns_meta(meta_dir, name):
     columns = []
-    with open(os.path.join(meta_dir, table["table"] + ".txt"), "r") as colfile:
+    with open(os.path.join(meta_dir, name + ".txt"), "r") as colfile:
         for line in colfile:
             if line.strip():
                 col_row = re.split("\|\s", line)
@@ -71,5 +113,22 @@ def parse_columns_meta(meta_dir, table):
                         "name": col_row[0].strip(),
                         "type": col_row[1].strip(),
                         "desc": col_row[7].strip()
+                    })
+    return columns
+
+
+def parse_columns_meta2(meta_dir, name):
+    columns = []
+    with open(os.path.join(meta_dir, name + ".txt"), "r") as colfile:
+        for line in colfile:
+            if line.strip():
+                col_row = re.split("\|\s", line)
+                if len(col_row) != 1:
+                    print(col_row)
+
+                    columns.append({
+                        "name": col_row[0].strip(),
+                        "type": col_row[1].strip(),
+                        "desc": col_row[6].strip()
                     })
     return columns

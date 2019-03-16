@@ -25,7 +25,8 @@ def create_docs(format, output):
     if format == "markdown":
         meta_dir = "meta"
 
-        markdown = mdgen.generate(meta.fetch(meta_dir))
+        metadata = meta.fetch(meta_dir)
+        markdown = mdgen.generate(metadata)
 
         if output and (not os.path.exists(output)):
             os.makedirs(output)

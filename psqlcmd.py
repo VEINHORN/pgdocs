@@ -14,3 +14,7 @@ def table_meta_cmd(hostname, db_name, table):
 def views_meta_cmd(hostname, db_name):
     # psql -c "\dv+" -t -h localhost -d store_db
     return ["psql", "-c", "\dv+", "-t", "-h", hostname, "-d", db_name]
+
+
+def view_meta_cmd(hostname, db_name, view):
+    return table_meta_cmd(hostname, db_name, view)
