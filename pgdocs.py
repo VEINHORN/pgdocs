@@ -1,10 +1,7 @@
 import argparse
-import subprocess
-import re
 import mdgen
-import os
-import psqlcmd as psql
 import meta
+import os
 
 
 def main():
