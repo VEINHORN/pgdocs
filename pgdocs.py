@@ -91,7 +91,8 @@ def load_tables_meta(meta_dir, hostname="localhost", db_name="store_db"):
 
     # fetch tables metadata
     with open(os.path.join(meta_dir, "tables.txt"), "w") as outfile:
-        subprocess.call(db_meta_cmd(hostname, db_name), stdout=outfile)
+        subprocess.call(psql.tables_meta_cmd(
+            hostname, db_name), stdout=outfile)
 
     # fetch views metadata
     # with open(os.path.join(meta_dir, "views.txt"), "w") as outfile:
@@ -105,15 +106,8 @@ def load_tables_meta(meta_dir, hostname="localhost", db_name="store_db"):
 
     for table in tables:
         with open(os.path.join(meta_dir, table + ".txt"), "w") as outfile:
-            subprocess.call(table_meta_cmd(table), stdout=outfile)
-
-
-def db_meta_cmd(hostname, db_name):
-    return ["psql", "-c", "\dt+", "-t", "-h", hostname, "-d", db_name]
-
-
-def table_meta_cmd(table):
-    return ["psql", "-c", "\d+ " + table, "-t", "-h", "localhost", "-d", "store_db"]
+            subprocess.call(psql.table_meta_cmd(
+                hostname, db_name, table), stdout=outfile)
 
 
 if __name__ == "__main__":
