@@ -29,7 +29,7 @@ def create_docs(format, output):
 
         load_tables_meta(meta_dir)
         tables = parse_table_meta(meta_dir)
-        markdown = mdgen.generate_markdown(tables)
+        markdown = mdgen.generate(tables)
 
         if output and (not os.path.exists(output)):
             os.makedirs(output)

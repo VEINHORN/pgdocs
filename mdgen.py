@@ -1,11 +1,12 @@
 import mrkdwn as md
 
 
-def generate_markdown(tables):
+def generate(tables):
     """Generate markdown based on tables metadata"""
     # print(tables)
 
     markdown = ""
+    markdown += md.h1("Tables") + "\n"
 
     for table in tables:
         markdown += table_desc(table)
@@ -13,7 +14,7 @@ def generate_markdown(tables):
 
 
 def table_desc(table):
-    table_desc = md.h1(table["table"]) + "\n" + table["comment"] + "\n"
+    table_desc = md.h2(table["table"]) + "\n" + table["comment"] + "\n"
     return table_desc + columns_table(table["columns"]) + "\n"
 
 
