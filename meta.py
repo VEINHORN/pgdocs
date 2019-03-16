@@ -8,8 +8,8 @@ import psqlcmd as psql
 import re
 
 
-def fetch(meta_dir):
-    fetch_metadata(meta_dir)
+def fetch(meta_dir, host="localhost", port=5432, db_name="store_db"):
+    fetch_metadata(meta_dir, host, port, db_name)
 
     tables = parse_tables_meta(meta_dir)
     views = parse_views_meta(meta_dir)
@@ -19,7 +19,7 @@ def fetch(meta_dir):
     }
 
 
-def fetch_metadata(meta_dir, hostname="localhost", db_name="store_db"):
+def fetch_metadata(meta_dir, hostname, port, db_name):
     """Fetch metadata from PostgreSQL instance using psql utility"""
 
     if not os.path.exists(meta_dir):

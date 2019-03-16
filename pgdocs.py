@@ -6,8 +6,12 @@ import os
 
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument("create", help="Create PostgreSQL documentation")
+    parser.add_argument("--help", action="help", help="Show help message")
+    parser.add_argument("-h", "--host", help="Database host")
+    parser.add_argument("-p", "--port", help="Database port")
+    parser.add_argument("-d", "--database", help="Database name")
     parser.add_argument(
         "-f", "--format", help="Format of output docs (Markdown)")
     parser.add_argument(
@@ -15,46 +19,39 @@ def main():
     args = parser.parse_args()
 
     if args.create:
-        create_docs(args.format, args.output)
+        create_docs(args.host, args.port, args.database,
+                    args.format, args.output)
 
 
-def create_docs(format, output):
+def create_docs(host, port, db_name, format, output):
     """Select default format when format option isn't specified"""
     if not format:
         format = "markdown"
 
+    meta_dir = "meta"
+
+    metadata = meta.fetch(
+        meta_dir, host, port, db_name) if host and port else meta.fetch(meta_dir)
+
+    if output and (not os.path.exists(output)):
+        os.makedirs(output)
+
     if format == "markdown":
         print("Start generating docs in Markdown format...")
-
-        meta_dir = "meta"
-
-        metadata = meta.fetch(meta_dir)
-        markdown = mdgen.generate(metadata)
-
-        if output and (not os.path.exists(output)):
-            os.makedirs(output)
 
         out_path = os.path.join(
             output, "docs.md") if output and format else "docs.md"
 
+        markdown = mdgen.generate(metadata)
         with open(out_path, "w") as outfile:
             outfile.write(markdown)
     if format == "html":
         print("Start generating docs in HTML format...")
 
-        meta_dir = "meta"
-
-        metadata = meta.fetch(meta_dir)
-        markdown = htmlgen.generate(metadata)
-
-        print(markdown)
-
-        if output and (not os.path.exists(output)):
-            os.makedirs(output)
-
         out_path = os.path.join(
             output, "docs.html") if output and format else "docs.html"
 
+        markdown = htmlgen.generate(metadata)
         with open(out_path, "w") as outfile:
             outfile.write(markdown)
 
