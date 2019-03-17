@@ -7,10 +7,13 @@ import mrkdwn as md
 
 def generate(metadata):
     """Generate markdown based on tables metadata"""
-    # print(tables)
-    # print(views)
+
     tables = metadata["tables"]
     views = metadata["views"]
+    indexes = metadata["indexes"]
+
+    # print(tables)
+    # print(views)
 
     markdown = ""
 
@@ -22,7 +25,16 @@ def generate(metadata):
     for view in views:
         markdown += view_desc(view)
 
+    markdown += md.h1("Indexes") + "\n"
+    for index in indexes:
+        markdown += index_desc(index)
+
     return markdown
+
+
+def index_desc(index):
+    index_desc = md.h2(index["name"]) + "\n"
+    return index_desc + index["desc"] + "\n"
 
 
 def view_desc(view):

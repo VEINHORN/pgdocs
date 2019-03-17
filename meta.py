@@ -6,6 +6,7 @@ import os
 import subprocess
 import psqlcmd as psql
 import re
+import yaml
 
 
 def fetch(meta_dir, host="localhost", port=5432, db_name="store_db"):
@@ -13,10 +14,21 @@ def fetch(meta_dir, host="localhost", port=5432, db_name="store_db"):
 
     tables = parse_tables_meta(meta_dir)
     views = parse_views_meta(meta_dir)
-    return {
+    indexes = parse_indexes_meta(meta_dir)
+
+    print(indexes)
+
+    metadata = {
         "tables": tables,
-        "views": views
+        "views": views,
+        "indexes": indexes
     }
+
+    # Write metadata to the result file
+    with open(os.path.join(meta_dir, "metadata.yml"), "w") as outfile:
+        yaml.dump(metadata, outfile)
+
+    return metadata
 
 
 def fetch_metadata(meta_dir, hostname, port, db_name):
@@ -55,6 +67,26 @@ def fetch_metadata(meta_dir, hostname, port, db_name):
         with open(os.path.join(meta_dir, view + ".txt"), "w") as outfile:
             subprocess.call(psql.view_meta_cmd(
                 hostname, db_name, view), stdout=outfile)
+
+    # Fetch indexes metadata
+    with open(os.path.join(meta_dir, "indexes.txt"), "w") as outfile:
+        subprocess.call(psql.indexes_meta_cmd(
+            hostname, db_name), stdout=outfile)
+
+
+def parse_indexes_meta(meta_dir):
+    indexes = []
+    with open(os.path.join(meta_dir, "indexes.txt"), "r") as inpfile:
+        for line in inpfile:
+            if line.strip():
+                rows = re.split("\|\s", line)
+                index = {
+                    "name": rows[1],
+                    "desc": rows[6]
+                }
+                print("index = " + index["name"])
+                indexes.append(index)
+    return indexes
 
 
 def parse_views_meta(meta_dir):

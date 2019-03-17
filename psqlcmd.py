@@ -18,3 +18,7 @@ def views_meta_cmd(hostname, db_name):
 
 def view_meta_cmd(hostname, db_name, view):
     return table_meta_cmd(hostname, db_name, view)
+
+
+def indexes_meta_cmd(hostname, db_name):
+    return ["psql", "-c", "\di+", "-t", "-h", hostname, "-d", db_name]

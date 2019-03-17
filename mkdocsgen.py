@@ -25,6 +25,11 @@ def generate(metadata, out_dir):
         for view in views:
             outfile.write(mdgen.view_desc(view))
 
+    indexes = metadata["indexes"]
+    with open(os.path.join(docs_dir, "indexes.md"), "w") as outfile:
+        for index in indexes:
+            outfile.write(mdgen.index_desc(index))
+
     # Create config file for MkDocs
     conf_file = os.path.join(out_dir, "mkdocs.yml")
     with open(conf_file, "w") as outfile:
@@ -43,6 +48,9 @@ def mkdocs_conf():
             },
             {
                 "Views": "views.md"
+            },
+            {
+                "Indexes": "indexes.md"
             }
         ]
     }
