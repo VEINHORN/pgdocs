@@ -2,6 +2,7 @@ import argparse
 import mdgen
 import htmlgen
 import mkdocsgen
+import pdfgen
 import meta
 import os
 
@@ -62,6 +63,8 @@ def create_docs(host, port, db_name, format, output):
         mkdocsgen.generate(metadata, output)
         # create docs folder and put all generated Markdown files in it
         # create mkdocs.yml file
+    elif format == "pdf":
+        pdfgen.generate(metadata)
 
 
 def create_markdown_docs():
