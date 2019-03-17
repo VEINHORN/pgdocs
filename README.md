@@ -67,6 +67,14 @@ To generate docs in HTML format just type:
 python pgdocs.py create -f html
 ```
 
+##### PDF
+
+To generate docs in *PDF* format just type below command:
+
+```shell
+python pgdocs.py create -f pdf
+```
+
 ##### MkDocs
 
 To generate docs in *MkDocs* format run below command:
