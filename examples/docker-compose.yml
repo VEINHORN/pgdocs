@@ -1,0 +1,34 @@
+version: "3.3"
+services:
+  db:
+    image: pgdocs-db:latest
+    ports:
+      - "5555:5432"
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+      - webnet
+    environment:
+      - POSTGRES_DB=store_db
+      - POSTGRES_USER=veinhorn
+      - POSTGRES_PASSWORD=admin
+  db-docs:
+    image: pgdocs:latest
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+      - webnet
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=store_db
+      - PGUSER=veinhorn
+      - PGPASSWORD=admin
+    depends_on:
+      - db
+networks:
+  webnet:

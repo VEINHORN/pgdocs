@@ -9,7 +9,7 @@ import re
 import yaml
 
 
-def fetch(meta_dir, host="localhost", port=5432, db_name="store_db"):
+def fetch(meta_dir, host="127.0.0.1", port=5432, db_name="store_db"):
     fetch_metadata(meta_dir, host, port, db_name)
 
     tables = parse_tables_meta(meta_dir)

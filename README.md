@@ -27,6 +27,26 @@ For now there is only one command - `create` which creates docs:
 python pgdocs.py create
 ```
 
+You can also run `pgdocs` using Docker, see details below.
+
+### Docker
+
+To simplify running doc generation you can use `Docker` image. To run just run below command:
+
+```shell
+docker run -it pgdocs:latest
+```
+
+#### Example
+
+To run Docker example just run:
+
+```shell
+docker stack deploy -c examples/docker-compose.yml pgdocs-example
+```
+
+
+
 ### Options
 
 ```
