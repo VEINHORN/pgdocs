@@ -1,8 +1,9 @@
 import argparse
-import mdgen
-import htmlgen
-import mkdocsgen
-import pdfgen
+
+from gen import mdgen
+from gen import pdfgen
+from gen import htmlgen
+from gen import mkdocsgen
 import meta
 import os
 
@@ -60,7 +61,11 @@ def create_docs(host, port, db_name, format, output):
         with open(out_path, "w") as outfile:
             outfile.write(markdown)
     elif format == "mkdocs":
-        mkdocsgen.generate(metadata, output)
+        print("Start generating docs in MkDocs format...")
+
+        out_path = output if output else "gen-docs"
+
+        mkdocsgen.generate(metadata, out_path)
         # create docs folder and put all generated Markdown files in it
         # create mkdocs.yml file
     elif format == "pdf":

@@ -2,7 +2,7 @@
 Generate docs in PDF format
 """
 
-import htmlgen
+from gen import htmlgen
 from xhtml2pdf import pisa
 
 

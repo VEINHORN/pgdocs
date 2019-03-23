@@ -3,7 +3,7 @@ Generate docs in HTML format
 """
 
 import markdown2
-import mdgen
+from gen import mdgen
 
 
 def generate(metadata):

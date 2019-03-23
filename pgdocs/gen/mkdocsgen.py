@@ -4,10 +4,11 @@ Generate docs in MkDocs format
 
 import os
 import yaml
-import mdgen
+from gen import mdgen
 
 
 def generate(metadata, out_dir):
+    print(out_dir)
     docs_dir = os.path.join(out_dir, "docs")
 
     if not os.path.exists(docs_dir):
