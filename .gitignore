@@ -105,3 +105,4 @@ venv.bak/
 
 *.txt
 docs.md
+/bin/docs

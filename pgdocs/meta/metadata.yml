@@ -1,0 +1,88 @@
+indexes:
+- desc: '
+
+    '
+  name: 'client_pkey '
+- desc: 'Index for client name.
+
+    '
+  name: 'idx_name    '
+- desc: '
+
+    '
+  name: 'item_pkey   '
+- desc: '
+
+    '
+  name: 'order_pkey  '
+tables:
+- columns:
+  - desc: Client unique identifier.
+    name: id
+    type: bigint
+  - desc: Contains client name.
+    name: name
+    type: character varying
+  - desc: Contains client address.
+    name: address
+    type: character varying
+  comment: 'Contains all client info.
+
+    '
+  schema: ' public '
+  size: '8192 bytes '
+  table: client
+  type: 'table '
+  user: 'veinhorn '
+- columns:
+  - desc: Item unique identifier.
+    name: id
+    type: bigint
+  - desc: Item name.
+    name: name
+    type: character varying
+  - desc: Item description.
+    name: description
+    type: character varying
+  comment: 'Contains all available goods.
+
+    '
+  schema: ' public '
+  size: '8192 bytes '
+  table: item
+  type: 'table '
+  user: 'veinhorn '
+- columns:
+  - desc: Order unique identifier.
+    name: id
+    type: character varying
+  - desc: Client which made order.
+    name: client_id
+    type: bigint
+  comment: 'Contains all client orders.
+
+    '
+  schema: ' public '
+  size: '8192 bytes '
+  table: order
+  type: 'table '
+  user: 'veinhorn '
+views:
+- columns:
+  - desc: ''
+    name: id
+    type: bigint
+  - desc: ''
+    name: name
+    type: character varying
+  - desc: Address by the way.
+    name: address
+    type: character varying
+  comment: 'Show top 5 most active clients.
+
+    '
+  schema: ' public '
+  size: '0 bytes '
+  type: 'view '
+  user: 'veinhorn '
+  view_name: most_active_clients
