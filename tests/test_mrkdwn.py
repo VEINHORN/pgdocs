@@ -1,10 +1,16 @@
 import unittest
+import pgdocs.mrkdwn as md
 
 
-def fun(x):
-    return x + 1
+class TestMarkdown(unittest.TestCase):
+    def test_h1(self):
+        self.assertEqual(md.h1("hi", False), "# hi")
+        self.assertEqual(md.h1("hi"), "# hi\n")
+
+    def test_h2(self):
+        self.assertEqual(md.h2("hi", False), "## hi")
+        self.assertEqual(md.h2("hi"), "## hi\n")
 
 
-class MyTest(unittest.TestCase):
-    def test(self):
-        self.assertEqual(fun(3), 23)
+if __name__ == "__main__":
+    unittest.main()
