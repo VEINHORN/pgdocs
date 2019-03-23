@@ -1,13 +1,19 @@
 # pgdocs
 
-`pgdocs` utility helps you to generate well formed documentation based on your PostgreSQL meta data. You can create docs in different formats: *Markdown*, *Excel*, *PDF*.
+`pgdocs` utility helps you to generate well formed documentation based on your PostgreSQL meta data. You can create docs in different formats: _Markdown_, _Excel_, _PDF_.
 
 ## Prerequisites
 
 There are several prerequisites to run script properly:
 
-- *Python 3* should be installed
+- _Python 3_ should be installed
 - You need to have `psql` utility in your **PATH**
+
+## Features
+
+- Produces documentation in various formats
+- Update existing documentation using CLI
+- Easy to deploy
 
 ## Usage
 
@@ -45,8 +51,6 @@ To run Docker example just run:
 docker stack deploy -c examples/docker-compose.yml pgdocs-example
 ```
 
-
-
 ### Options
 
 ```
@@ -62,14 +66,14 @@ docker stack deploy -c examples/docker-compose.yml pgdocs-example
 You can specify database host, port and name using command line options:
 
 ```shell
-python pgdocs.py create -h localhost -p 5432 -d store_db 
+python pgdocs.py create -h localhost -p 5432 -d store_db
 ```
 
 If you'll not specify this options `pgdocs` will try to generate docs from `localhost:5432`.
 
 #### Formats
 
-`pgdocs` can generate database documentation in different formats: *Markdown*, *Excel*, *PDF*. You can also deploy documentation in *MkDocs* format using *Docker*.
+`pgdocs` can generate database documentation in different formats: _Markdown_, _Excel_, _PDF_. You can also deploy documentation in _MkDocs_ format using _Docker_.
 
 ##### Markdown
 
@@ -89,7 +93,7 @@ python pgdocs.py create -f html
 
 ##### PDF
 
-To generate docs in *PDF* format just type below command:
+To generate docs in _PDF_ format just type below command:
 
 ```shell
 python pgdocs.py create -f pdf
@@ -97,10 +101,18 @@ python pgdocs.py create -f pdf
 
 ##### MkDocs
 
-To generate docs in *MkDocs* format run below command:
+To generate docs in _MkDocs_ format run below command:
 
 ```shell
 python pgdocs.py create -f mkdocs
+```
+
+##### SchemaSpy
+
+You can also generate documentation in "SchemaSpy" format (all required dependencies are already included):
+
+```shell
+python pgdocs.py create -f schemaspy
 ```
 
 #### Output
