@@ -10,20 +10,36 @@ import os
 
 def main():
     parser = argparse.ArgumentParser(add_help=False)
-    parser.add_argument("create", help="Create PostgreSQL documentation")
-    parser.add_argument("--help", action="help", help="Show help message")
-    parser.add_argument("-h", "--host", help="Database host")
-    parser.add_argument("-p", "--port", help="Database port")
-    parser.add_argument("-d", "--database", help="Database name")
-    parser.add_argument(
+
+    subparsers = parser.add_subparsers(help="commands", dest="command")
+
+    # A create command
+    create_parser = subparsers.add_parser(
+        "create", help="Create PostgreSQL documentation", add_help=False)
+    create_parser.add_argument("-h", "--host", help="Database host")
+    create_parser.add_argument("-p", "--port", help="Database port")
+    create_parser.add_argument("-d", "--database", help="Database name")
+    create_parser.add_argument(
         "-f", "--format", help="Format of output docs (Markdown)")
-    parser.add_argument(
+    create_parser.add_argument(
         "-o", "--output", help="Output folder for generated docs")
+
+    # A meta command
+    meta_parser = subparsers.add_parser(
+        "meta", help="Fetch PostgreSQL metadata")
+    meta_parser.add_argument(
+        "-o", "--output", help="Output path for metadata file")
+
+    #parser.add_argument("--help", action="help", help="Show help message")
     args = parser.parse_args()
 
-    if args.create:
+    print(args)
+
+    if args.command == "create":
         create_docs(args.host, args.port, args.database,
                     args.format, args.output)
+    elif args.command == "meta":
+        print("Start fetching meta...")
 
 
 def create_docs(host, port, db_name, format, output):
