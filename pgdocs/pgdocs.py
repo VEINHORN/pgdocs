@@ -6,6 +6,7 @@ from gen import htmlgen
 from gen import mkdocsgen
 import meta
 import os
+import yaml
 
 
 def main():
@@ -26,20 +27,30 @@ def main():
 
     # A meta command
     meta_parser = subparsers.add_parser(
-        "meta", help="Fetch PostgreSQL metadata")
+        "meta", help="Fetch PostgreSQL metadata", add_help=False)
+    meta_parser.add_argument("-h", "--host", help="Database host")
+    meta_parser.add_argument("-p", "--port", help="Database port")
+    meta_parser.add_argument("-d", "--database", help="Database name")
     meta_parser.add_argument(
         "-o", "--output", help="Output path for metadata file")
 
     #parser.add_argument("--help", action="help", help="Show help message")
     args = parser.parse_args()
 
-    print(args)
-
     if args.command == "create":
         create_docs(args.host, args.port, args.database,
                     args.format, args.output)
     elif args.command == "meta":
         print("Start fetching meta...")
+        save_meta(args.host, args.port, args.database, args.output)
+
+
+def save_meta(host, port, db_name, output):
+    # handle unspecified output here
+    meta_dir = "meta"
+    metadata = meta.fetch(meta_dir, host, port,
+                          db_name) if host and port else meta.fetch(meta_dir)
+    print(metadata["tables"])
 
 
 def create_docs(host, port, db_name, format, output):

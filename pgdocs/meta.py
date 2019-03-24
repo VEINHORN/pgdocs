@@ -16,7 +16,7 @@ def fetch(meta_dir, host="127.0.0.1", port=5432, db_name="store_db"):
     views = parse_views_meta(meta_dir)
     indexes = parse_indexes_meta(meta_dir)
 
-    print(indexes)
+    # print(indexes)
 
     metadata = {
         "tables": tables,
@@ -84,7 +84,7 @@ def parse_indexes_meta(meta_dir):
                     "name": rows[1],
                     "desc": rows[6]
                 }
-                print("index = " + index["name"])
+                #print("index = " + index["name"])
                 indexes.append(index)
     return indexes
 
@@ -103,7 +103,7 @@ def parse_views_meta(meta_dir):
                     "size": rows[4],
                     "comment": rows[5]
                 }
-                print("view = " + view["view_name"])
+                #print("view = " + view["view_name"])
 
                 view["columns"] = parse_columns_meta2(
                     meta_dir, view["view_name"])
@@ -125,7 +125,7 @@ def parse_tables_meta(meta_dir):
                     "size": rows[4],
                     "comment": rows[5]
                 }
-                print("table = " + table["table"])
+                #print("table = " + table["table"])
 
                 table["columns"] = parse_columns_meta(meta_dir, table["table"])
                 tables.append(table)
@@ -139,7 +139,7 @@ def parse_columns_meta(meta_dir, name):
             if line.strip():
                 col_row = re.split("\|\s", line)
                 if len(col_row) != 1:
-                    print(col_row)
+                    # print(col_row)
 
                     columns.append({
                         "name": col_row[0].strip(),
@@ -156,7 +156,7 @@ def parse_columns_meta2(meta_dir, name):
             if line.strip():
                 col_row = re.split("\|\s", line)
                 if len(col_row) != 1:
-                    print(col_row)
+                    # print(col_row)
 
                     columns.append({
                         "name": col_row[0].strip(),
