@@ -27,13 +27,25 @@ It will create database docs in current working directory using default output f
 
 ### Commands
 
-For now there is only one command - `create` which creates docs:
+There are 2 commands supported: `create` and `meta`.
+
+#### Create
+
+If you want generate docs for your database run below command:
 
 ```shell
 python pgdocs.py create
 ```
 
 You can also run `pgdocs` using Docker, see details below.
+
+#### Meta
+
+When you just need to fetch database metadata for backup or any other purposes you can use `meta` command:
+
+```shell
+python3 pgdocs.py meta
+```
 
 ### Docker
 
