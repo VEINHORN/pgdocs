@@ -7,6 +7,7 @@ from gen import mkdocsgen
 import meta
 import os
 import yaml
+import json
 
 
 def main():
@@ -32,6 +33,8 @@ def main():
     meta_parser.add_argument("-p", "--port", help="Database port")
     meta_parser.add_argument("-d", "--database", help="Database name")
     meta_parser.add_argument(
+        "-f", "--format", help="Output format: YAML or JSON")
+    meta_parser.add_argument(
         "-o", "--output", help="Output path for metadata file")
 
     #parser.add_argument("--help", action="help", help="Show help message")
@@ -42,15 +45,40 @@ def main():
                     args.format, args.output)
     elif args.command == "meta":
         print("Start fetching meta...")
-        save_meta(args.host, args.port, args.database, args.output)
+        save_meta(args.host, args.port, args.database,
+                  args.output, args.format)
 
 
-def save_meta(host, port, db_name, output):
+def save_meta(host, port, db_name, output, format):
+    def meta_filename(format):
+        if format == "yaml":
+            return "meta.yml"
+        elif format == "json":
+            return "meta.json"
+        else:
+            "unknown"
+
     # handle unspecified output here
     meta_dir = "meta"
     metadata = meta.fetch(meta_dir, host, port,
                           db_name) if host and port else meta.fetch(meta_dir)
-    print(metadata["tables"])
+
+    out_dir = os.path.dirname(output) if output else ""
+    if out_dir and not os.path.exists(out_dir):
+        os.makedirs(out_dir)
+
+    out_path = output if output else meta_filename(format)
+
+    format = format if format else "yaml"  # default format is YAML
+
+    if format == "yaml":
+        with open(out_path, "w") as outfile:
+            yaml.dump(metadata, outfile)
+    elif format == "json":
+        with open(out_path, "w") as outfile:
+            json.dump(metadata, outfile, indent=4)
+    else:
+        print("Unsupported format for meta command")
 
 
 def create_docs(host, port, db_name, format, output):
