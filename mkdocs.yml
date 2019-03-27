@@ -1,0 +1,8 @@
+site_name: pgdocs docs
+nav:
+  - Architecture: architecture.md
+  - Commands: commands.md
+  - Docker: docker.md
+  - Testing: testing.md
+theme:
+  name: readthedocs
