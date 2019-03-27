@@ -8,6 +8,7 @@ import meta
 import os
 import yaml
 import json
+from command import enrich
 
 
 def main():
@@ -37,6 +38,14 @@ def main():
     meta_parser.add_argument(
         "-o", "--output", help="Output path for metadata file")
 
+    # A enrich command
+    enrich_parser = subparsers.add_parser(
+        "enrich", help="Used to enrich/update current db metadata", add_help=False)
+    enrich_parser.add_argument("-s", "--schema", help="Schema name")
+    enrich_parser.add_argument("-t", "--table", help="Table name")
+    enrich_parser.add_argument(
+        "-d", "--description", help="Table/Column/etc description")
+
     #parser.add_argument("--help", action="help", help="Show help message")
     args = parser.parse_args()
 
@@ -47,6 +56,9 @@ def main():
         print("Start fetching meta...")
         save_meta(args.host, args.port, args.database,
                   args.output, args.format)
+    elif args.command == "enrich":
+        print("Start enriching docs...")
+        enrich.execute(args.schema, args.table, args.description)
 
 
 def save_meta(host, port, db_name, output, format):
