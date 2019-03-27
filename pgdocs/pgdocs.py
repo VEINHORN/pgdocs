@@ -41,6 +41,8 @@ def main():
     # A enrich command
     enrich_parser = subparsers.add_parser(
         "enrich", help="Used to enrich/update current db metadata", add_help=False)
+    enrich_parser.add_argument(
+        "-p", "--parameter", help="Parameter to describe schema/table/column")
     enrich_parser.add_argument("-s", "--schema", help="Schema name")
     enrich_parser.add_argument("-t", "--table", help="Table name")
     enrich_parser.add_argument(
@@ -57,8 +59,10 @@ def main():
         save_meta(args.host, args.port, args.database,
                   args.output, args.format)
     elif args.command == "enrich":
-        print("Start enriching docs...")
-        enrich.execute(args.schema, args.table, args.description)
+        if args.parameter:
+            enrich.execute_param(args.parameter, args.description)
+        else:
+            enrich.execute(args.schema, args.table, args.description)
 
 
 def save_meta(host, port, db_name, output, format):
