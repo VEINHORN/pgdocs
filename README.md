@@ -39,6 +39,34 @@ python pgdocs.py create
 
 You can also run `pgdocs` using Docker, see details below.
 
+#### Enrich
+
+`enrich` allows you to enrich (add/update)
+
+##### Long `enrich` command
+
+Update table description:
+
+```shell
+pgdocs enrich -s public -t client -d "some description here"
+```
+
+Update column description:
+
+```shell
+pgdocs enrich -s public -t client -c column_name -d "some description here"
+```
+
+##### Short `enrich` command
+
+If you are a little bit tired of using long `enrich` command, you can use simplified version:
+
+```shell
+pgdocs enrich -p "schema.table.column" -d "some database object description here"
+```
+
+With `-p` option you can specify _schema_, _table_, _column_ in format like `schema.table.column`.
+
 #### Meta
 
 When you just need to fetch database metadata for backup or any other purposes you can use `meta` command:
