@@ -1,21 +1,24 @@
-# pgdocs
+![logo](logo.png)
 
 `pgdocs` utility helps you to generate well formed documentation based on your PostgreSQL meta data. You can create docs in different formats: _Markdown_, _Excel_, _PDF_.
 
+## Features
+
+- Generate db documentation based on metadata
+- Supported output formats: HTML, PDF, *Markdown*, MkDocs
+- Enrich existing metadata using CLI commands
+- Show schema/table/column description using CLI commands
+
 ## Prerequisites
 
-There are several prerequisites to run script properly:
+You need some software to be installed:
 
 - _Python 3_ should be installed
 - You need to have `psql` utility in your **PATH**
-
-## Features
-
-- Produces documentation in various formats
-- Update existing documentation using CLI
-- Easy to deploy
+- Installed *Java* **if you're going to use SchemaSpy output format**
 
 ## Usage
+
 
 To generate docs just type below command:
 
@@ -23,11 +26,11 @@ To generate docs just type below command:
 python pgdocs.py create
 ```
 
-It will create database docs in current working directory using default output format (Markdown).
+By default *Markdown* format will be used. You can specify any of supported formats (see [Formats](#formats) for more details). Database docs will be created in working directory.
 
 ### Commands
 
-There are 2 commands supported: `create` and `meta`.
+There are a bunch of commands supported by `pgdocs` utility.
 
 #### Create
 
