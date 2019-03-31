@@ -9,6 +9,7 @@ import os
 import yaml
 import json
 from command import enrich
+from profile import profile
 
 
 def main():
@@ -48,16 +49,40 @@ def main():
     enrich_parser.add_argument(
         "-d", "--description", help="Table/Column/etc description")
 
-    #parser.add_argument("--help", action="help", help="Show help message")
+    # parser.add_argument("--help", action="help", help="Show help message")
     args = parser.parse_args()
 
     if args.command == "create":
         create_docs(args.host, args.port, args.database,
                     args.format, args.output)
     elif args.command == "meta":
-        print("Start fetching meta...")
-        save_meta(args.host, args.port, args.database,
-                  args.output, args.format)
+        p = profile.read("./")
+
+        # if we cannot get host/port/db from params, than get from profile
+        if args.host and args.port and args.database:
+            save_meta(args.host, args.port, args.database,
+                      args.output, args.format)
+
+            p.sessions.append(profile.Session(
+                args.host, args.port, args.database))
+
+            # save only last 5 sessions
+            if len(p.sessions) > 5:
+                p.sessions = p.sessions[1:]
+                profile.save(p, "./")
+            else:
+                profile.save(p, "./")
+        else:
+            if (not p.sessions) or (not p.last_session()):
+                print("You should specify host/port/database parameters...")
+                return
+
+            last_session = p.last_session()
+            print("Using params from last session: host={}, port={}, db={}".format(
+                last_session.host, last_session.port, last_session.db_name))
+            save_meta(last_session.host, last_session.port,
+                      last_session.db_name, args.output, args.format)
+
     elif args.command == "enrich":
         if args.parameter:
             enrich.execute_param(args.parameter, args.description)
