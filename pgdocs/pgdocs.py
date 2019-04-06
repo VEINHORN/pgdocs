@@ -10,6 +10,7 @@ import yaml
 import json
 from command import enrich
 from profile import profile
+from command import backup
 
 
 def main():
@@ -30,7 +31,7 @@ def main():
 
     # A meta command
     meta_parser = subparsers.add_parser(
-        "meta", help="Fetch PostgreSQL metadata", add_help=False)
+        "backup", help="Fetch PostgreSQL metadata", add_help=False)
     meta_parser.add_argument("-h", "--host", help="Database host")
     meta_parser.add_argument("-p", "--port", help="Database port")
     meta_parser.add_argument("-d", "--database", help="Database name")
@@ -55,71 +56,14 @@ def main():
     if args.command == "create":
         create_docs(args.host, args.port, args.database,
                     args.format, args.output)
-    elif args.command == "meta":
-        p = profile.read("./")
-
-        # if we cannot get host/port/db from params, than get from profile
-        if args.host and args.port and args.database:
-            save_meta(args.host, args.port, args.database,
-                      args.output, args.format)
-
-            p.sessions.append(profile.Session(
-                args.host, args.port, args.database))
-
-            # save only last 5 sessions
-            if len(p.sessions) > 5:
-                p.sessions = p.sessions[1:]
-                profile.save(p, "./")
-            else:
-                profile.save(p, "./")
-        else:
-            if (not p.sessions) or (not p.last_session()):
-                print("You should specify host/port/database parameters...")
-                return
-
-            last_session = p.last_session()
-            print("Using params from last session: host={}, port={}, db={}".format(
-                last_session.host, last_session.port, last_session.db_name))
-            save_meta(last_session.host, last_session.port,
-                      last_session.db_name, args.output, args.format)
-
+    elif args.command == "backup":
+        backup.execute(args.host, args.port, args.database,
+                       args.output, args.format)
     elif args.command == "enrich":
         if args.parameter:
             enrich.execute_param(args.parameter, args.description)
         else:
             enrich.execute(args.schema, args.table, args.description)
-
-
-def save_meta(host, port, db_name, output, format):
-    def meta_filename(format):
-        if format == "yaml":
-            return "meta.yml"
-        elif format == "json":
-            return "meta.json"
-        else:
-            "unknown"
-
-    # handle unspecified output here
-    meta_dir = "meta"
-    metadata = meta.fetch(meta_dir, host, port,
-                          db_name) if host and port else meta.fetch(meta_dir)
-
-    out_dir = os.path.dirname(output) if output else ""
-    if out_dir and not os.path.exists(out_dir):
-        os.makedirs(out_dir)
-
-    out_path = output if output else meta_filename(format)
-
-    format = format if format else "yaml"  # default format is YAML
-
-    if format == "yaml":
-        with open(out_path, "w") as outfile:
-            yaml.dump(metadata, outfile)
-    elif format == "json":
-        with open(out_path, "w") as outfile:
-            json.dump(metadata, outfile, indent=4)
-    else:
-        print("Unsupported format for meta command")
 
 
 def create_docs(host, port, db_name, format, output):
