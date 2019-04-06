@@ -5,7 +5,7 @@
 ## Features
 
 - Generate db documentation based on metadata
-- Supported output formats: HTML, PDF, *Markdown*, MkDocs
+- Supported output formats: HTML, PDF, _Markdown_, MkDocs
 - Enrich existing metadata using CLI commands
 - Show schema/table/column description using CLI commands
 
@@ -15,10 +15,9 @@ You need some software to be installed:
 
 - _Python 3_ should be installed
 - You need to have `psql` utility in your **PATH**
-- Installed *Java* **if you're going to use SchemaSpy output format**
+- Installed _Java_ **if you're going to use SchemaSpy output format**
 
 ## Usage
-
 
 To generate docs just type below command:
 
@@ -26,7 +25,7 @@ To generate docs just type below command:
 python pgdocs.py create
 ```
 
-By default *Markdown* format will be used. You can specify any of supported formats (see [Formats](#formats) for more details). Database docs will be created in working directory.
+By default _Markdown_ format will be used. You can specify any of supported formats (see [Formats](#formats) for more details). Database docs will be created in working directory.
 
 ### Commands
 
@@ -70,12 +69,12 @@ pgdocs enrich -p "schema.table.column" -d "some database object description here
 
 With `-p` option you can specify _schema_, _table_, _column_ in format like `schema.table.column`.
 
-#### Meta
+#### Backup
 
-When you just need to fetch database metadata for backup or any other purposes you can use `meta` command:
+When you just need to fetch database metadata for backup or any other purposes you can use `backup` command:
 
 ```shell
-python3 pgdocs.py meta
+python3 pgdocs.py backup
 ```
 
 ### Docker

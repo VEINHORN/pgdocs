@@ -1,6 +1,6 @@
 # Commands
 
-There are 3 commands available for now: `create`, `enrich` and `meta`.
+There are 3 commands available for now: `create`, `enrich` and `backup`.
 
 ## Create
 
@@ -10,6 +10,6 @@ Generates database documentation using a bunch of available formats: Markdown, P
 
 Enrich (add/update/delete) database documentation (metadata).
 
-## Meta
+## Backup
 
-Fetch metadata from PostgreSQL database and save it using one of the formats: _YAML_ or _JSON_.
+Back ups metadata from your PostgreSQL database and saves it using one of the formats: _YAML_ or _JSON_.
