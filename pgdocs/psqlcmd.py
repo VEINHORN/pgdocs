@@ -24,11 +24,11 @@ def indexes_meta_cmd(hostname, db_name):
     return ["psql", "-c", "\di+", "-t", "-h", hostname, "-d", db_name]
 
 
-def update_desc(schema, table, desc):
-    def query():
-        str = "COMMENT ON TABLE " + \
-            ("public" if not schema else schema) + \
-            "." + table + " IS '" + desc + "'"
-        return str
+def update_desc(host, port, schema, database, table, desc):
+    print("host={}, port={}, schema={}, db={}, table={}, desc={}".format(
+        host, port, schema, database, table, desc))
 
-    return ["psql", "-c " + query(), "-h", "localhost", "-d", "store_db"]
+    def query():
+        return "COMMENT ON TABLE {}.{} IS '{}'".format("public" if not schema else schema, table, desc)
+
+    return ["psql", "-c " + query(), "-h", host, "-p", port, "-d", database]

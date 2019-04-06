@@ -39,9 +39,10 @@ def save(profile, home_dir=os.path.expanduser('~')):
 def read(home_dir=os.path.expanduser('~')):
     """Read user profile from .pgdocs config"""
     outfile = config_file(home_dir)
+    # create empty file and return empty profile with empty sessions
     if not os.path.exists(outfile):
         open(outfile, "w").close()
-        return Profile([])  # return profile with empty sessions
+        return Profile([])
 
     with open(config_file(home_dir), "r") as inpfile:
         # return empty profile if we cannot parse json

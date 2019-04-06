@@ -6,8 +6,6 @@ from gen import htmlgen
 from gen import mkdocsgen
 import meta
 import os
-import yaml
-import json
 from command import enrich
 from profile import profile
 from command import backup
@@ -18,7 +16,7 @@ def main():
 
     subparsers = parser.add_subparsers(help="commands", dest="command")
 
-    # A create command
+    # Create command
     create_parser = subparsers.add_parser(
         "create", help="Create PostgreSQL documentation", add_help=False)
     create_parser.add_argument("-h", "--host", help="Database host")
@@ -29,7 +27,7 @@ def main():
     create_parser.add_argument(
         "-o", "--output", help="Output folder for generated docs")
 
-    # A meta command
+    # Backup command
     meta_parser = subparsers.add_parser(
         "backup", help="Fetch PostgreSQL metadata", add_help=False)
     meta_parser.add_argument("-h", "--host", help="Database host")
@@ -40,17 +38,19 @@ def main():
     meta_parser.add_argument(
         "-o", "--output", help="Output path for metadata file")
 
-    # A enrich command
+    # Enrich command
     enrich_parser = subparsers.add_parser(
         "enrich", help="Used to enrich/update current db metadata", add_help=False)
     enrich_parser.add_argument(
-        "-p", "--parameter", help="Parameter to describe schema/table/column")
+        "-k", "--key", help="Parameter to describe schema/table/column")
+    enrich_parser.add_argument("-h", "--host", help="Database host")
+    enrich_parser.add_argument("-p", "--port", help="Database port")
+    enrich_parser.add_argument("-d", "--database", help="Database name")
     enrich_parser.add_argument("-s", "--schema", help="Schema name")
     enrich_parser.add_argument("-t", "--table", help="Table name")
     enrich_parser.add_argument(
-        "-d", "--description", help="Table/Column/etc description")
+        "-c", "--comment", help="Table/Column/etc description")
 
-    # parser.add_argument("--help", action="help", help="Show help message")
     args = parser.parse_args()
 
     if args.command == "create":
@@ -60,10 +60,12 @@ def main():
         backup.execute(args.host, args.port, args.database,
                        args.output, args.format)
     elif args.command == "enrich":
-        if args.parameter:
-            enrich.execute_param(args.parameter, args.description)
+        if args.key:
+            enrich.execute_param(
+                args.host, args.port, args.database, args.key, args.comment)
         else:
-            enrich.execute(args.schema, args.table, args.description)
+            enrich.execute(args.host, args.port, args.database,
+                           args.schema, args.table, args.comment)
 
 
 def create_docs(host, port, db_name, format, output):
@@ -110,10 +112,6 @@ def create_docs(host, port, db_name, format, output):
         # create mkdocs.yml file
     elif format == "pdf":
         pdfgen.generate(metadata)
-
-
-def create_markdown_docs():
-    print("Using markdown generator")
 
 
 if __name__ == "__main__":
