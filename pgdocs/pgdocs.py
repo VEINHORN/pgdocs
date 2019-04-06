@@ -41,13 +41,14 @@ def main():
     # Enrich command
     enrich_parser = subparsers.add_parser(
         "enrich", help="Used to enrich/update current db metadata", add_help=False)
-    enrich_parser.add_argument(
-        "-k", "--key", help="Parameter to describe schema/table/column")
+
     enrich_parser.add_argument("-h", "--host", help="Database host")
     enrich_parser.add_argument("-p", "--port", help="Database port")
     enrich_parser.add_argument("-d", "--database", help="Database name")
     enrich_parser.add_argument("-s", "--schema", help="Schema name")
     enrich_parser.add_argument("-t", "--table", help="Table name")
+    enrich_parser.add_argument(
+        "-k", "--key", help="Parameter to describe schema/table/column")
     enrich_parser.add_argument(
         "-c", "--comment", help="Table/Column/etc description")
 
