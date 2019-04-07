@@ -77,6 +77,18 @@ When you just need to fetch database metadata for backup or any other purposes y
 python3 pgdocs.py backup
 ```
 
+#### Show
+
+If you want to dispaly db object description, you can use `show` command.
+
+Show table description in `public` schema.
+
+```shell
+python3 pgdocs/pgdocs.py show -h localhost -p 5432 -d store_db -s public -t client
+```
+
+You can also specify any other schema.
+
 ### Docker
 
 To simplify running doc generation you can use `Docker` image. To run just run below command:

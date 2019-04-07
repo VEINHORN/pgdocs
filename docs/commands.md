@@ -13,3 +13,7 @@ Enrich (add/update/delete) database documentation (metadata).
 ## Backup
 
 Back ups metadata from your PostgreSQL database and saves it using one of the formats: _YAML_ or _JSON_.
+
+## Show
+
+Show description for database objects such as schema/table/column.
