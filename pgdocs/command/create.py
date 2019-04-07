@@ -8,9 +8,10 @@ from gen import mdgen
 from gen import htmlgen
 from gen import mkdocsgen
 from gen import pdfgen
+import validator
 
 
-def execute(host, port, db_name, format, output):
+def execute(host, port, database, format, output):
     def out_path(out_dir, extension):
         filename = "docs.{}".format(extension)
         return os.path.join(output, filename) if output else filename
@@ -19,8 +20,9 @@ def execute(host, port, db_name, format, output):
         format = "markdown"
 
     meta_dir = "meta"
+    host, port, database = validator.connection_props(host, port, database)
     metadata = meta.fetch(meta_dir, host, port,
-                          db_name) if host and port else meta.fetch(meta_dir)
+                          database) if host and port else meta.fetch(meta_dir)
 
     # Here we put generated docs
     if output and (not os.path.exists(output)):

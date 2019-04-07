@@ -23,6 +23,8 @@ def connection_props(host, port, database):
         session = pf.last_session()
         return (session.host, session.port, session.db_name)
     elif database:  # when user provided db name it returns default host and port
+        pf.sessions.append(profile.Session("localhost", 5432, database))
+        profile.save(pf, home_dir)
         return ("localhost", 5432, database)
     else:
         raise Exception(
