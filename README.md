@@ -43,25 +43,25 @@ You can also run `pgdocs` using Docker, see details below.
 
 #### Enrich
 
-`enrich` allows you to enrich (add/update)
+With `enrich` command you can add/update schema/table/column description.
 
 ##### Long `enrich` command
 
 Update table description:
 
 ```shell
-pgdocs enrich -s public -t client -d "some description here"
+python3 pgdocs/pgdocs.py enrich -h localhost -p 5432 -s public -d store_db -t client --description "some table description here"
 ```
 
 Update column description:
 
 ```shell
-pgdocs enrich -s public -t client -c column_name -d "some description here"
+python3 pgdocs/pgdocs.py enrich -h localhost -p 5432 -s public -d store_db -t client -c id --description "some column description here"
 ```
 
 ##### Short `enrich` command
 
-If you are a little bit tired of using long `enrich` command, you can use simplified version:
+If you are a little bit tired of using long `enrich` command version, you can use simplified version:
 
 ```shell
 pgdocs enrich -p "schema.table.column" -d "some database object description here"
