@@ -8,11 +8,12 @@ from profile import profile
 def connection_props(host, port, database):
     """Validates and tries to return proper connection properties"""
     home_dir = "./"
+    max_sessions = 3
     pf = profile.read(home_dir)
 
     if host and port and database:
         pf.sessions.append(profile.Session(host, port, database))
-        if len(pf.sessions) > 5:
+        if len(pf.sessions) > max_sessions:
             pf.sessions = pf.sessions[1:]
             profile.save(pf, home_dir)
         else:
