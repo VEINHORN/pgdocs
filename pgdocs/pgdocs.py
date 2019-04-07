@@ -44,13 +44,14 @@ def main():
 
     enrich_parser.add_argument("-h", "--host", help="Database host")
     enrich_parser.add_argument("-p", "--port", help="Database port")
-    enrich_parser.add_argument("-d", "--database", help="Database name")
     enrich_parser.add_argument("-s", "--schema", help="Schema name")
+    enrich_parser.add_argument("-d", "--database", help="Database name")
     enrich_parser.add_argument("-t", "--table", help="Table name")
+    enrich_parser.add_argument("-c", "--column", help="Table column name")
     enrich_parser.add_argument(
         "-k", "--key", help="Parameter to describe schema/table/column")
     enrich_parser.add_argument(
-        "-c", "--comment", help="Table/Column/etc description")
+        "--description", help="table/column/etc description")
 
     args = parser.parse_args()
 
@@ -61,12 +62,8 @@ def main():
         backup.execute(args.host, args.port, args.database,
                        args.output, args.format)
     elif args.command == "enrich":
-        if args.key:
-            enrich.execute_param(
-                args.host, args.port, args.database, args.key, args.comment)
-        else:
-            enrich.execute(args.host, args.port, args.database,
-                           args.schema, args.table, args.comment)
+        enrich.execute(args.host, args.port, args.database,
+                       args.schema, args.table, args.column, args.key, args.description)
 
 
 def create_docs(host, port, db_name, format, output):
