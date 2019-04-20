@@ -105,5 +105,8 @@ venv.bak/
 
 *.txt
 docs.md
+docs.html
 /bin/docs/
+/bin/schemaspy.properties
 meta/
+.pgdocs

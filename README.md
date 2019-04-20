@@ -166,7 +166,7 @@ python pgdocs.py create -f mkdocs
 You can also generate documentation in "SchemaSpy" format (all required dependencies are already included):
 
 ```shell
-python pgdocs.py create -f schemaspy
+python3 pgdocs/pgdocs.py create -f schemaspy -h localhost -p 5432 -d store_db -o gen-docs
 ```
 
 #### Output
